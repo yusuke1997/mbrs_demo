@@ -1,0 +1,6 @@
+mbrs
+streamlit
+watchdog
+fastapi
+uvicorn
+httpx
