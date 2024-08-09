@@ -124,6 +124,9 @@ def main():
 
     #use_file_upload = st.checkbox('Use file upload instead of text input')
     use_file_upload = False
+    source = []
+    hypothesis = []
+    reference = []
     
     if use_file_upload:
         col1, col2 = st.columns(2)
@@ -154,16 +157,24 @@ def main():
                 reference = st.text_area("reference").split('\n')
 
     if st.button('Submit'):
-        st.divider()
-        #st.write('push')
-        #st.write(st.session_state.metric_configs[st.session_state.metric])
-        #st.write(st.session_state.metric_configs)
-        #st.write(st.session_state.decoder_configs)
-        a = execute(source, hypothesis)
-        st.write(a)
-        st.write('ID: ', str(a.idx[0]))
-        st.write('Result: ', a.sentence[0])
-        st.write('Score:', a.score[0])
-        
+        # ここでエラー定義。GPUは使わない
+        if st.session_state.metric in ['bleurt', 'comet', 'cometkiwi', 'xcomet']:
+            st.divider()
+            st.warning('This demo site is not supprt embedding base metrics. Please install via `pip install mbrs`.', icon="⚠️")
+        elif len(hypothesis) >32:
+            st.divider()
+            st.warning('This demo site is up to 32 hypotheses due to computational resources. Please install via `pip install mbrs`.', icon="⚠️")
+        else:
+            st.divider()
+            #st.write('push')
+            #st.write(st.session_state.metric_configs[st.session_state.metric])
+            #st.write(st.session_state.metric_configs)
+            #st.write(st.session_state.decoder_configs)
+            a = execute(source, hypothesis)
+            st.write(a)
+            st.write('ID: ', str(a.idx[0]))
+            st.write('Result: ', a.sentence[0])
+            st.write('Score:', a.score[0])
+            
 if __name__ == "__main__":
     main()
