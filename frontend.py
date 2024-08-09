@@ -122,8 +122,9 @@ def main():
     st.divider()
     
 
-    use_file_upload = st.checkbox('Use file upload instead of text input')
-
+    #use_file_upload = st.checkbox('Use file upload instead of text input')
+    use_file_upload = False
+    
     if use_file_upload:
         col1, col2 = st.columns(2)
         with col1:
@@ -135,12 +136,19 @@ def main():
             with col3[0]:
                 uploaded_file3 = st.file_uploader("Upload File 3")
     else:
-        col1, col2 = st.columns(2)
-        with col1:
-            source = st.text_area("source")
-        with col2:
-            hypothesis = st.text_area("hypothesis").split('\n')
-        if st.checkbox('Add reference'):
+        if 'comet' not in st.session_state.metric:
+            col2 = st.columns(1)
+            source = []
+            with col2[0]:
+                hypothesis = st.text_area("hypothesis").split('\n')
+        else:
+            col1, col2 = st.columns(2)
+            with col1:
+                source = st.text_area("source")
+            with col2:
+                hypothesis = st.text_area("hypothesis").split('\n')
+                
+        if st.session_state.metric != 'cometkiwi' and st.checkbox('Add reference'):
             col3 = st.columns(1)
             with col3[0]:
                 reference = st.text_area("reference").split('\n')
